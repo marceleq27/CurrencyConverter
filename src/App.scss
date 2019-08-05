@@ -1,1 +1,132 @@
-$primary-color: #3e3b89;
+$primary-color: #3b3969;
+$secondary-color: #7774b0;
+$bgc: #e1e0f7;
+$font: "Blinker", sans-serif;
+@import url("https://fonts.googleapis.com/css?family=Blinker:300,400,700&display=swap&subset=latin-ext");
+
+@mixin h2style($property) {
+  font-size: 2.7rem;
+  font-weight: 300;
+  background-color: $property;
+  margin-top: 25px;
+}
+@mixin centerPosition($position) {
+  position: $position;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@mixin form($background) {
+  background-color: $background;
+  @include centerPosition(absolute);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+@mixin input($background, $color) {
+  background-color: $background;
+  border: none;
+  font-size: 4.5rem;
+  text-align: center;
+  color: $color;
+  width: 70%;
+  font-weight: 400;
+}
+@mixin select {
+  background-color: transparent;
+  border: none;
+  font-size: 1.8rem;
+  text-align: center;
+  color: $secondary-color;
+}
+.active {
+  transform: rotate(270deg) !important;
+  transition: 0.2s;
+}
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: $font;
+  font-size: 62.5%;
+  background-color: $bgc;
+}
+section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 95vw;
+  height: 95vh;
+  text-align: center;
+  @include centerPosition(absolute);
+  .arrows {
+    padding: 18px;
+    @include centerPosition(absolute);
+    z-index: 1000;
+    background-color: #fff;
+    border: 5px solid $primary-color;
+    border-radius: 50%;
+    svg {
+      font-size: 2.5rem;
+      transform: rotate(90deg);
+      color: $primary-color;
+      background-color: #fff;
+    }
+  }
+  .container {
+    flex-basis: 50%;
+    background-color: $primary-color;
+    width: 100%;
+    color: #fff;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+    h2 {
+      @include h2style($primary-color);
+    }
+    form {
+      @include centerPosition(absolute);
+      @include form($primary-color);
+
+      input {
+        @include input($primary-color, #fff);
+      }
+      select {
+        @include select();
+        margin-top: 30px;
+      }
+    }
+  }
+  .exchange {
+    flex-basis: 50%;
+    color: $primary-color;
+    background-color: #fff;
+    border-radius: 0 0 20px 20px;
+    width: 100%;
+    position: relative;
+    h2 {
+      @include h2style(#fff);
+      width: 100%;
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    form {
+      @include form(#fff);
+      @include centerPosition(absolute);
+      select {
+        @include select();
+        margin-bottom: 30px;
+      }
+      input {
+        @include input(#fff, $primary-color);
+      }
+    }
+  }
+}

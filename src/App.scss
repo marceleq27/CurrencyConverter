@@ -124,8 +124,9 @@ section {
         @include select();
         margin-bottom: 30px;
       }
-      input {
+      p {
         @include input(#fff, $primary-color);
+        width: 100%;
       }
     }
   }

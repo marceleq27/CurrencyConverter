@@ -30,7 +30,7 @@ $font: "Blinker", sans-serif;
   font-size: 4.5rem;
   text-align: center;
   color: $color;
-  width: 70%;
+  width: 60%;
   font-weight: 400;
 }
 @mixin select {
@@ -61,8 +61,8 @@ section {
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-  width: 95vw;
-  height: 95vh;
+  width: 360px;
+  height: 640px;
   text-align: center;
   @include centerPosition(absolute);
   .arrows {
@@ -92,7 +92,23 @@ section {
     form {
       @include centerPosition(absolute);
       @include form($primary-color);
-
+      .amount {
+        position: relative;
+        background-color: $primary-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span {
+          background-color: $primary-color;
+          font-size: 2.5rem;
+          color: $secondary-color;
+          font-weight: 300;
+          line-height: 4.5rem;
+          position: absolute;
+          right: 10%;
+          bottom: 0;
+        }
+      }
       input {
         @include input($primary-color, #fff);
       }
@@ -127,6 +143,9 @@ section {
       p {
         @include input(#fff, $primary-color);
         width: 100%;
+        span {
+          background-color: #fff;
+        }
       }
     }
   }

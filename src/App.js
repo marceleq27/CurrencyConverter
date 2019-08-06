@@ -6,11 +6,17 @@ import "../src/App.scss";
 class App extends Component {
   state = {
     value: "420",
+    value2: "",
+    rate1: "",
+    rate2: "",
     valueExchange: "0",
     selectedValue1: "",
     selectedValue2: "",
-    pln: ""
+    pln: "",
+    symbol2: "Zl",
+    symbol1: "$"
   };
+
   handleChange = e => {
     this.setState({
       value: e.target.value
@@ -24,9 +30,7 @@ class App extends Component {
       .selectedOptions[0].text;
     const selectOption2 = document.getElementById("selectControl2")
       .selectedOptions[0].text;
-
     if (selectOption1 !== "PLN") {
-      const { value } = this.state;
       fetch(
         `http://api.nbp.pl/api/exchangerates/rates/a/${selectOption1}/?format=json`
       )
@@ -35,15 +39,18 @@ class App extends Component {
         })
         .then(response => response.json())
         .then(data => {
+          const { value } = this.state;
           this.setState({
-            valueExchange: (value * data.rates[0].mid).toFixed(2)
+            pln: (value * data.rates[0].mid).toFixed(2),
+            rate1: data.rates[0].mid
           });
+          if (selectOption1 !== "PLN" && selectOption2 === "PLN") {
+            const { pln } = this.state;
+            this.setState({
+              valueExchange: pln
+            });
+          }
         });
-    } else {
-      const { value } = this.state;
-      this.setState({
-        pln: value
-      });
     }
     if (selectOption2 !== "PLN") {
       fetch(
@@ -54,20 +61,24 @@ class App extends Component {
         })
         .then(response => response.json())
         .then(data => {
-          const { pln } = this.state;
-          if (pln === 1) {
-            const exchangedValue = pln * data.rates[0].mid;
+          this.setState({
+            rate2: data.rates[0].mid
+          });
+          if (selectOption1 !== "PLN" && selectOption2 !== "PLN") {
+            const { pln, rate2 } = this.state;
             this.setState({
-              valueExchange: exchangedValue.toFixed(2)
+              valueExchange: (pln / rate2).toFixed(2)
             });
-          } else {
-            const exchangedValue = pln / data.rates[0].mid;
+          }
+          if (selectOption1 === "PLN" && selectOption2 !== "PLN") {
+            const { value, rate2 } = this.state;
             this.setState({
-              valueExchange: exchangedValue.toFixed(2)
+              valueExchange: (value / rate2).toFixed(2)
             });
           }
         });
     }
+
     if (selectOption1 === selectOption2) {
       alert("You can't convert the same currency!");
     }
@@ -78,32 +89,38 @@ class App extends Component {
     switch (selectElement.selectedOptions[0].text) {
       case "USD":
         this.setState({
-          selectedValue1: selectElement.options[0].value
+          selectedValue1: selectElement.options[0].value,
+          symbol1: "$"
         });
         break;
       case "PLN":
         this.setState({
-          selectedValue1: selectElement.options[1].value
+          selectedValue1: selectElement.options[1].value,
+          symbol1: "Zl"
         });
         break;
       case "GBP":
         this.setState({
-          selectedValue1: selectElement.options[2].value
+          selectedValue1: selectElement.options[2].value,
+          symbol1: "£"
         });
         break;
       case "EUR":
         this.setState({
-          selectedValue1: selectElement.options[3].value
+          selectedValue1: selectElement.options[3].value,
+          symbol1: "€"
         });
         break;
       case "CHF":
         this.setState({
-          selectedValue1: selectElement.options[4].value
+          selectedValue1: selectElement.options[4].value,
+          symbol1: "CHF"
         });
         break;
       default:
         this.setState({
-          selectedValue1: selectElement.options[0].value
+          selectedValue1: selectElement.options[0].value,
+          symbol1: "$"
         });
     }
   };
@@ -112,49 +129,73 @@ class App extends Component {
     switch (selectElement.selectedOptions[0].text) {
       case "USD":
         this.setState({
-          selectedValue2: selectElement.options[0].value
+          selectedValue2: selectElement.options[1].value,
+          symbol2: "$"
         });
         break;
       case "PLN":
         this.setState({
-          selectedValue2: selectElement.options[1].value
+          selectedValue2: selectElement.options[0].value,
+          symbol2: "Zl"
         });
         break;
       case "GBP":
         this.setState({
-          selectedValue2: selectElement.options[2].value
+          selectedValue2: selectElement.options[2].value,
+          symbol2: "£"
         });
         break;
       case "EUR":
         this.setState({
-          selectedValue2: selectElement.options[3].value
+          selectedValue2: selectElement.options[3].value,
+          symbol2: "€"
         });
         break;
       case "CHF":
         this.setState({
-          selectedValue2: selectElement.options[4].value
+          selectedValue2: selectElement.options[4].value,
+          symbol2: "CHF"
         });
         break;
       default:
         this.setState({
-          selectedValue2: selectElement.options[0].value
+          selectedValue2: selectElement.options[0].value,
+          symbol2: "Zl"
         });
     }
   };
 
+  getValue = () => {
+    const selectElement = document.getElementById("selectControl1");
+    const text = selectElement.selectedOptions[0].text;
+    console.log(text);
+    return text;
+  };
+
   render() {
-    const { value, valueExchange, selectedValue1, selectedValue2 } = this.state;
+    const {
+      value,
+      valueExchange,
+      selectedValue1,
+      selectedValue2,
+      symbol2,
+      symbol1
+    } = this.state;
     return (
       <section>
         <div className="container">
           <h2>{selectedValue1 || "United States Dollar"}</h2>
           <form id="form1">
-            <input
-              type="number"
-              className="number"
-              value={value}
-              onChange={this.handleChange}
-            />
+            <div className="amount">
+              <input
+                type="number"
+                className="number"
+                value={value}
+                onChange={this.handleChange}
+              />
+              <span>{symbol1}</span>
+            </div>
+
             <select onChange={this.selectValue1} id="selectControl1">
               <option value="United States Dollar">USD</option>
               <option value="Polish Zloty">PLN</option>
@@ -180,7 +221,9 @@ class App extends Component {
               <option value="Euro">EUR</option>
               <option value="Swiss Franc">CHF</option>
             </select>
-            <p>{valueExchange}</p>
+            <p>
+              {valueExchange} <span>{symbol2}</span>
+            </p>
           </form>
           <h2 className="selectValue">{selectedValue2 || "Polish Zloty"}</h2>
         </div>

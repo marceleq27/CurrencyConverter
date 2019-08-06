@@ -24,8 +24,9 @@ class App extends Component {
       .selectedOptions[0].text;
     const selectOption2 = document.getElementById("selectControl2")
       .selectedOptions[0].text;
-    console.log(selectOption1);
+
     if (selectOption1 !== "PLN") {
+      const { value } = this.state;
       fetch(
         `http://api.nbp.pl/api/exchangerates/rates/a/${selectOption1}/?format=json`
       )
@@ -35,12 +36,13 @@ class App extends Component {
         .then(response => response.json())
         .then(data => {
           this.setState({
-            valueExchange: (this.state.value * data.rates[0].mid).toFixed(2)
+            valueExchange: (value * data.rates[0].mid).toFixed(2)
           });
         });
     } else {
+      const { value } = this.state;
       this.setState({
-        pln: this.state.value
+        pln: value
       });
     }
     if (selectOption2 !== "PLN") {
@@ -52,13 +54,14 @@ class App extends Component {
         })
         .then(response => response.json())
         .then(data => {
-          if (this.state.pln === 1) {
-            const exchangedValue = this.state.pln * data.rates[0].mid;
+          const { pln } = this.state;
+          if (pln === 1) {
+            const exchangedValue = pln * data.rates[0].mid;
             this.setState({
               valueExchange: exchangedValue.toFixed(2)
             });
           } else {
-            const exchangedValue = this.state.pln / data.rates[0].mid;
+            const exchangedValue = pln / data.rates[0].mid;
             this.setState({
               valueExchange: exchangedValue.toFixed(2)
             });
@@ -71,7 +74,7 @@ class App extends Component {
   };
 
   selectValue1 = () => {
-    let selectElement = document.getElementById("selectControl1");
+    const selectElement = document.getElementById("selectControl1");
     switch (selectElement.selectedOptions[0].text) {
       case "USD":
         this.setState({
@@ -105,7 +108,7 @@ class App extends Component {
     }
   };
   selectValue2 = () => {
-    let selectElement = document.getElementById("selectControl2");
+    const selectElement = document.getElementById("selectControl2");
     switch (selectElement.selectedOptions[0].text) {
       case "USD":
         this.setState({
@@ -171,17 +174,15 @@ class App extends Component {
         <div className="exchange">
           <form id="form2">
             <select onChange={this.selectValue2} id="selectControl2">
-              <option value="United States Dollar">USD</option>
               <option value="Polish Zloty">PLN</option>
+              <option value="United States Dollar">USD</option>
               <option value="Pound Sterling">GBP</option>
               <option value="Euro">EUR</option>
               <option value="Swiss Franc">CHF</option>
             </select>
             <p>{valueExchange}</p>
           </form>
-          <h2 className="selectValue">
-            {selectedValue2 || "United States Dollar"}
-          </h2>
+          <h2 className="selectValue">{selectedValue2 || "Polish Zloty"}</h2>
         </div>
       </section>
     );

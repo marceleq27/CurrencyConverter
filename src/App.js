@@ -25,6 +25,7 @@ class App extends Component {
   handleFormSubmit = e => {
     const svg = document.querySelector("svg");
     svg.classList.toggle("active");
+
     e.preventDefault();
     const selectOption1 = document.getElementById("selectControl1")
       .selectedOptions[0].text;
@@ -114,7 +115,7 @@ class App extends Component {
       case "CHF":
         this.setState({
           selectedValue1: selectElement.options[4].value,
-          symbol1: "CHF"
+          symbol1: "₣"
         });
         break;
       default:
@@ -154,7 +155,7 @@ class App extends Component {
       case "CHF":
         this.setState({
           selectedValue2: selectElement.options[4].value,
-          symbol2: "CHF"
+          symbol2: "₣"
         });
         break;
       default:
@@ -221,7 +222,7 @@ class App extends Component {
               <option value="Euro">EUR</option>
               <option value="Swiss Franc">CHF</option>
             </select>
-            <p>
+            <p className="displayValue">
               {valueExchange} <span>{symbol2}</span>
             </p>
           </form>

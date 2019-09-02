@@ -22,6 +22,7 @@ class App extends Component {
       value: e.target.value
     });
   };
+
   handleFormSubmit = e => {
     const svg = document.querySelector("svg");
     svg.classList.toggle("active");
@@ -87,89 +88,28 @@ class App extends Component {
 
   selectValue1 = () => {
     const selectElement = document.getElementById("selectControl1");
-    switch (selectElement.selectedOptions[0].text) {
-      case "USD":
-        this.setState({
-          selectedValue1: selectElement.options[0].value,
-          symbol1: "$"
-        });
-        break;
-      case "PLN":
-        this.setState({
-          selectedValue1: selectElement.options[1].value,
-          symbol1: "Zl"
-        });
-        break;
-      case "GBP":
-        this.setState({
-          selectedValue1: selectElement.options[2].value,
-          symbol1: "£"
-        });
-        break;
-      case "EUR":
-        this.setState({
-          selectedValue1: selectElement.options[3].value,
-          symbol1: "€"
-        });
-        break;
-      case "CHF":
-        this.setState({
-          selectedValue1: selectElement.options[4].value,
-          symbol1: "₣"
-        });
-        break;
-      default:
-        this.setState({
-          selectedValue1: selectElement.options[0].value,
-          symbol1: "$"
-        });
-    }
+    const index = selectElement.options.selectedIndex;
+    const symbol = selectElement.options[index].attributes[1].value;
+    const value = selectElement.options[index].value;
+    this.setState({
+      selectedValue1: value,
+      symbol1: symbol
+    });
   };
   selectValue2 = () => {
     const selectElement = document.getElementById("selectControl2");
-    switch (selectElement.selectedOptions[0].text) {
-      case "USD":
-        this.setState({
-          selectedValue2: selectElement.options[1].value,
-          symbol2: "$"
-        });
-        break;
-      case "PLN":
-        this.setState({
-          selectedValue2: selectElement.options[0].value,
-          symbol2: "Zl"
-        });
-        break;
-      case "GBP":
-        this.setState({
-          selectedValue2: selectElement.options[2].value,
-          symbol2: "£"
-        });
-        break;
-      case "EUR":
-        this.setState({
-          selectedValue2: selectElement.options[3].value,
-          symbol2: "€"
-        });
-        break;
-      case "CHF":
-        this.setState({
-          selectedValue2: selectElement.options[4].value,
-          symbol2: "₣"
-        });
-        break;
-      default:
-        this.setState({
-          selectedValue2: selectElement.options[0].value,
-          symbol2: "Zl"
-        });
-    }
+    const index = selectElement.options.selectedIndex;
+    const symbol = selectElement.options[index].attributes[1].value;
+    const value = selectElement.options[index].value;
+    this.setState({
+      selectedValue2: value,
+      symbol2: symbol
+    });
   };
 
   getValue = () => {
     const selectElement = document.getElementById("selectControl1");
     const text = selectElement.selectedOptions[0].text;
-    console.log(text);
     return text;
   };
 
@@ -198,11 +138,21 @@ class App extends Component {
             </div>
 
             <select onChange={this.selectValue1} id="selectControl1">
-              <option value="United States Dollar">USD</option>
-              <option value="Polish Zloty">PLN</option>
-              <option value="Pound Sterling">GBP</option>
-              <option value="Euro">EUR</option>
-              <option value="Swiss Franc">CHF</option>
+              <option value="United States Dollar" symbol="$">
+                USD
+              </option>
+              <option value="Polish Zloty" symbol="Zl">
+                PLN
+              </option>
+              <option value="Pound Sterling" symbol="£">
+                GBP
+              </option>
+              <option value="Euro" symbol="€">
+                EUR
+              </option>
+              <option value="Swiss Franc" symbol="₣">
+                CHF
+              </option>
             </select>
           </form>
         </div>
@@ -216,11 +166,21 @@ class App extends Component {
         <div className="exchange">
           <form id="form2">
             <select onChange={this.selectValue2} id="selectControl2">
-              <option value="Polish Zloty">PLN</option>
-              <option value="United States Dollar">USD</option>
-              <option value="Pound Sterling">GBP</option>
-              <option value="Euro">EUR</option>
-              <option value="Swiss Franc">CHF</option>
+              <option value="Polish Zloty" symbol="Zl">
+                PLN
+              </option>
+              <option value="United States Dollar" symbol="$">
+                USD
+              </option>
+              <option value="Pound Sterling" symbol="£">
+                GBP
+              </option>
+              <option value="Euro" symbol="€">
+                EUR
+              </option>
+              <option value="Swiss Franc" symbol="₣">
+                CHF
+              </option>
             </select>
             <p className="displayValue">
               {valueExchange} <span>{symbol2}</span>

@@ -4,78 +4,75 @@ import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
 import "../src/App.scss";
 
 class App extends Component {
-  state = {
-    value: "420",
-    value2: "",
-    rate1: "",
-    rate2: "",
-    valueExchange: "0",
-    selectedValue1: "",
-    selectedValue2: "",
-    pln: "",
-    symbol2: "Zl",
-    symbol1: "$"
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "420",
+      value2: "",
+      rate1: "",
+      rate2: "",
+      valueExchange: "0",
+      selectedValue1: "",
+      selectedValue2: "",
+      pln: "",
+      symbol2: "Zl",
+      symbol1: "$",
+    };
+  }
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      value: e.target.value
+      value: e.target.value,
     });
   };
 
-  handleFormSubmit = e => {
+  handleFormSubmit = (e) => {
     const svg = document.querySelector("svg");
     svg.classList.toggle("active");
 
     e.preventDefault();
-    const selectOption1 = document.getElementById("selectControl1")
-      .selectedOptions[0].text;
-    const selectOption2 = document.getElementById("selectControl2")
-      .selectedOptions[0].text;
+    const selectOption1 = document.getElementById("selectControl1").selectedOptions[0].text;
+    const selectOption2 = document.getElementById("selectControl2").selectedOptions[0].text;
     if (selectOption1 !== "PLN") {
-      fetch(
-        `http://api.nbp.pl/api/exchangerates/rates/a/${selectOption1}/?format=json`
-      )
-        .then(response => {
+      fetch(`http://api.nbp.pl/api/exchangerates/rates/a/${selectOption1}/?format=json`)
+        .then((response) => {
           if (response.ok) return response;
         })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           const { value } = this.state;
           this.setState({
             pln: (value * data.rates[0].mid).toFixed(2),
-            rate1: data.rates[0].mid
+            rate1: data.rates[0].mid,
           });
           if (selectOption1 !== "PLN" && selectOption2 === "PLN") {
             const { pln } = this.state;
             this.setState({
-              valueExchange: pln
+              valueExchange: pln,
             });
           }
         });
     }
     if (selectOption2 !== "PLN") {
-      fetch(
-        `http://api.nbp.pl/api/exchangerates/rates/a/${selectOption2}/?format=json`
-      )
-        .then(response => {
+      fetch(`http://api.nbp.pl/api/exchangerates/rates/a/${selectOption2}/?format=json`)
+        .then((response) => {
           if (response.ok) return response;
         })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           this.setState({
-            rate2: data.rates[0].mid
+            rate2: data.rates[0].mid,
           });
           if (selectOption1 !== "PLN" && selectOption2 !== "PLN") {
             const { pln, rate2 } = this.state;
             this.setState({
-              valueExchange: (pln / rate2).toFixed(2)
+              valueExchange: (pln / rate2).toFixed(2),
             });
           }
           if (selectOption1 === "PLN" && selectOption2 !== "PLN") {
             const { value, rate2 } = this.state;
             this.setState({
-              valueExchange: (value / rate2).toFixed(2)
+              valueExchange: (value / rate2).toFixed(2),
             });
           }
         });
@@ -93,7 +90,7 @@ class App extends Component {
     const value = selectElement.options[index].value;
     this.setState({
       selectedValue1: value,
-      symbol1: symbol
+      symbol1: symbol,
     });
   };
   selectValue2 = () => {
@@ -103,7 +100,7 @@ class App extends Component {
     const value = selectElement.options[index].value;
     this.setState({
       selectedValue2: value,
-      symbol2: symbol
+      symbol2: symbol,
     });
   };
 
@@ -114,26 +111,14 @@ class App extends Component {
   };
 
   render() {
-    const {
-      value,
-      valueExchange,
-      selectedValue1,
-      selectedValue2,
-      symbol2,
-      symbol1
-    } = this.state;
+    const { value, valueExchange, selectedValue1, selectedValue2, symbol2, symbol1 } = this.state;
     return (
       <section>
         <div className="container">
           <h2>{selectedValue1 || "United States Dollar"}</h2>
           <form id="form1">
             <div className="amount">
-              <input
-                type="number"
-                className="number"
-                value={value}
-                onChange={this.handleChange}
-              />
+              <input type="number" className="number" value={value} onChange={this.handleChange} />
               <span>{symbol1}</span>
             </div>
 
@@ -156,11 +141,7 @@ class App extends Component {
             </select>
           </form>
         </div>
-        <button
-          className="arrows"
-          type="submit"
-          onClick={this.handleFormSubmit}
-        >
+        <button className="arrows" type="submit" onClick={this.handleFormSubmit}>
           <FontAwesomeIcon icon={faExchangeAlt} />
         </button>
         <div className="exchange">

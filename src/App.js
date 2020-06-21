@@ -34,7 +34,7 @@ class App extends Component {
     const selectOption1 = document.getElementById("selectControl1").selectedOptions[0].text;
     const selectOption2 = document.getElementById("selectControl2").selectedOptions[0].text;
     if (selectOption1 !== "PLN") {
-      fetch(`http://api.nbp.pl/api/exchangerates/rates/a/${selectOption1}/?format=json`)
+      fetch(`https://api.nbp.pl/api/exchangerates/rates/a/${selectOption1}/?format=json`)
         .then((response) => {
           if (response.ok) return response;
         })
@@ -54,7 +54,7 @@ class App extends Component {
         });
     }
     if (selectOption2 !== "PLN") {
-      fetch(`http://api.nbp.pl/api/exchangerates/rates/a/${selectOption2}/?format=json`)
+      fetch(`https://api.nbp.pl/api/exchangerates/rates/a/${selectOption2}/?format=json`)
         .then((response) => {
           if (response.ok) return response;
         })
